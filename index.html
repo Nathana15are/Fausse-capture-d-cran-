@@ -1,1 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Fake Chat Generator</title>
+<style>
+body { font-family: Arial; margin: 0; padding: 0; background: #f2f2f2; }
+nav {
+    background-color: #075E54; 
+    color: white; 
+    padding: 10px 20px; 
+    display: flex; 
+    justify-content: space-around;
+}
+nav a {
+    color: white; text-decoration: none; font-weight: bold; padding: 5px 10px;
+}
+nav a:hover { background-color: #128C7E; border-radius: 5px; }
 
+section { display: none; padding: 20px; }
+section.active { display: block; }
+
+/* Chat WhatsApp */
+#chat { width: 350px; height: 500px; border: 1px solid #ccc; margin: 20px auto; padding: 10px; overflow-y: auto; background: #e5ddd5; border-radius: 10px; display: flex; flex-direction: column;}
+.message { padding: 5px 10px; margin: 5px; border-radius: 10px; max-width: 80%; }
+.sent { background: #dcf8c6; align-self: flex-end; }
+.received { background: #fff; align-self: flex-start; }
+
+/* Chat Snapchat */
+#snapchatChat { width: 350px; height: 500px; border: 1px solid #ccc; margin: 20px auto; padding: 10px; overflow-y: auto; background: #fffc00; border-radius: 10px; display: flex; flex-direction: column; }
+.snapMsg { padding: 5px 10px; margin: 5px; border-radius: 10px; max-width: 80%; background: white; }
+</style>
+</head>
+<body>
+
+<!-- Menu -->
+<nav>
+  <a href="#" onclick="showSection('home')">Accueil</a>
+  <a href="#" onclick="showSection('generator')">WhatsApp</a>
+  <a href="#" onclick="showSection('snapchat')">Snapchat</a>
+  <a href="#" onclick="showSection('instructions')">Instructions</a>
+</nav>
+
+<!-- Bannière AdSense discrète -->
+<div style="text-align:center; margin-top:5px;">
+  <ins class="adsbygoogle"
+       style="display:block; width:320px; height:50px; margin:0 auto; opacity:0.7;"
+       data-ad-client="ca-pub-7375895978180283"
+       data-ad-slot="1234567890"></ins>
+</div>
+
+<!-- Sections -->
+<section id="home" class="active">
+  <h1>Bienvenue sur Fake Chat Generator !</h1>
+  <p>Crée des fausses conversations WhatsApp et Snapchat pour faire des blagues.</p>
+</section>
+
+<section id="generator">
+  <h2>Créer une fausse capture WhatsApp</h2>
+  <input type="text" id="name" placeholder="Nom du contact"><br><br>
+  <input type="text" id="msg" placeholder="Message"><br><br>
+  <select id="type">
+    <option value="received">Reçu</option>
+    <option value="sent">Envoyé</option>
+  </select><br><br>
+  <button onclick="addMessage()">Ajouter message</button>
+  <button onclick="downloadChat()">Télécharger</button>
+  <div id="chat"></div>
+</section>
+
+<section id="snapchat">
+  <h2>Créer une fausse capture Snapchat</h2>
+  <input type="text" id="snapName" placeholder="Nom du contact"><br><br>
+  <input type="text" id="snapMsg" placeholder="Message"><br><br>
+  <button onclick="addSnapMessage()">Ajouter message</button>
+  <button onclick="downloadSnapChat()">Télécharger</button>
+  <div id="snapchatChat"></div>
+</section>
+
+<section id="instructions">
+  <h2>Instructions</h2>
+  <p>1. Choisis le nom et le message.</p>
+  <p>2. Pour WhatsApp : choisi envoyé ou reçu.</p>
+  <p>3. Clique sur "Ajouter message" pour générer la conversation.</p>
+  <p>4. Clique sur "Télécharger" pour obtenir l’image.</p>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7375895978180283"
+     crossorigin="anonymous"></script>
+
+<script>
+// Afficher la bannière AdSense
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+// Navigation
+function showSection(id){
+    document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+// WhatsApp
+function addMessage(){
+    let name = document.getElementById('name').value || "Contact";
+    let msg = document.getElementById('msg').value;
+    let type = document.getElementById('type').value;
+    if(msg.trim() === "") return;
+    let div = document.createElement('div');
+    div.classList.add('message', type);
+    div.innerHTML = type==='received'? "<strong>"+name+":</strong> "+msg : msg;
+    document.getElementById('chat').appendChild(div);
+    document.getElementById('msg').value = "";
+}
+function downloadChat(){
+    html2canvas(document.getElementById('chat')).then(canvas=>{
+        let link=document.createElement('a');
+        link.download='whatsapp.png';
+        link.href=canvas.toDataURL();
+        link.click();
+    });
+}
+
+// Snapchat
+function addSnapMessage(){
+    let name=document.getElementById('snapName').value||"Contact";
+    let msg=document.getElementById('snapMsg').value;
+    if(msg.trim()==="") return;
+    let div=document.createElement('div');
+    div.classList.add('snapMsg');
+    div.innerHTML="<strong>"+name+":</strong> "+msg;
+    document.getElementById('snapchatChat').appendChild(div);
+    document.getElementById('snapMsg').value="";
+}
+function downloadSnapChat(){
+    html2canvas(document.getElementById('snapchatChat')).then(canvas=>{
+        let link=document.createElement('a');
+        link.download='snapchat.png';
+        link.href=canvas.toDataURL();
+        link.click();
+    });
+}
+</script>
+
+</body>
+</html>
